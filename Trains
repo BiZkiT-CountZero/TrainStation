@@ -1,0 +1,107 @@
+package com.gmail.bizkit245;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
+
+@XmlRootElement
+public class Trains {
+        @XmlElement(name = "train")
+    private ArrayList<Train> listTrain = new ArrayList<>();
+
+    public Trains() {
+    }
+
+    public void creatTrain(){
+
+        Train train = null;
+        try {
+
+            String from = getFrom("");
+            String to = getTo("");
+            Date departureTime = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - k:mm");
+            String dateText = getDateText("");
+            try {
+                departureTime = sdf.parse(dateText);
+            } catch (ParseException e) {
+                System.out.println(e);
+            }
+            Train tr = new Train(from, to, departureTime);
+            this.addTrain(tr);
+        } catch (NullPointerException e) {
+            System.out.println("Abort");
+            return;
+        }
+    }
+
+    public void addTrain(Train train) {
+        listTrain.add(train);
+    }
+    public ArrayList<Train> getListTrains() {
+        return new ArrayList<>(listTrain);
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        listTrain.stream()
+                .forEachOrdered(n -> sb.append(n).append(System.lineSeparator()));
+        return sb.toString();
+    }
+
+    private String getFrom(String f) throws NullPointerException {
+        Scanner sc = new Scanner(System.in);
+        boolean done = false;
+        String from = " ";
+        for (; !done;) {
+            try {
+                System.out.print("Input where's the train from: ");
+                from = sc.nextLine();
+                done = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid format");
+            }
+        }
+        return from;
+    }
+
+    private String getTo(String t) throws NullPointerException {
+        Scanner sc = new Scanner(System.in);
+        boolean done = false;
+        String to = " ";
+        for (; !done;) {
+            try {
+                System.out.print("Input where will the train go: ");
+                to = sc.nextLine();
+                done = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid format");
+            }
+        }
+        return to;
+    }
+
+    private String getDateText(String d) throws NullPointerException {
+        Scanner sc = new Scanner(System.in);
+        boolean done = false;
+
+        String dateText = " ";
+            for (; !done; ) {
+            try {
+                System.out.print("Input date and time of departure of the train (dd/MM/yyyy - hh:mm): ");
+                dateText = sc.nextLine();
+                done = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid format");
+            }
+        }
+        return dateText;
+    }
+
+}
